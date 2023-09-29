@@ -5,7 +5,7 @@ import { render } from 'react-dom'
 const App = () => {
 	const [status, setStatus] = useState('off')
 	const [time, setTime] = useState(10)
-	const [_, setTimer] = useState(null)
+	const [timer, setTimer] = useState(null)
 
 	const formatTime = secs => {
 		const minutes = Math.floor(secs / 60)
@@ -24,6 +24,12 @@ const App = () => {
 		)
 	}
 
+	const stopTimer = () => {
+		setTime(null)
+		setStatus('off')
+		setTimer(null)
+		clearInterval(timer)
+	}
 	useEffect(() => {
 		if (time === 0) {
 			if (status === 'work') {
@@ -31,7 +37,7 @@ const App = () => {
 				setTime(20)
 			} else {
 				setStatus('work')
-				setTime(1200)
+				setTime(10)
 			}
 		}
 	}, [time])
@@ -57,7 +63,7 @@ const App = () => {
 				</button>
 			)}
 			{status !== 'off' && (
-				<button className='btn'>
+				<button className='btn' onClick={() => stopTimer()}>
 					Stop
 				</button>
 			)}

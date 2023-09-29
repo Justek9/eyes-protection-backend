@@ -4,8 +4,10 @@ import { render } from 'react-dom'
 
 const App = () => {
 	const [status, setStatus] = useState('off')
-	const [time, setTime] = useState(10)
+	const [time, setTime] = useState(1200)
 	const [timer, setTimer] = useState(null)
+
+	const bell = new Audio('./sounds/bell.wav')
 
 	const formatTime = secs => {
 		const minutes = Math.floor(secs / 60)
@@ -15,7 +17,7 @@ const App = () => {
 	}
 
 	const startTimer = () => {
-		setTime(10)
+		setTime(1200)
 		setStatus('work')
 		setTimer(
 			setInterval(() => {
@@ -30,14 +32,25 @@ const App = () => {
 		setTimer(null)
 		clearInterval(timer)
 	}
+
+	const closeApp = () => {
+		window.close()
+	}
+
+	const playBell = () => {
+		bell.play()
+	}
+
 	useEffect(() => {
 		if (time === 0) {
 			if (status === 'work') {
 				setStatus('rest')
 				setTime(20)
+				playBell()
 			} else {
 				setStatus('work')
-				setTime(10)
+				setTime(1200)
+				playBell()
 			}
 		}
 	}, [time])
@@ -67,7 +80,9 @@ const App = () => {
 					Stop
 				</button>
 			)}
-			<button className='btn btn-close'>X</button>
+			<button className='btn btn-close' onClick={() => closeApp()}>
+				X
+			</button>
 		</div>
 	)
 }

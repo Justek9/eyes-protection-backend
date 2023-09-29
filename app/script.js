@@ -3,9 +3,16 @@ import { useState } from 'react'
 import { render } from 'react-dom'
 
 const App = () => {
-	const [status, setStatus] = useState('off')
+	const [status, setStatus] = useState('work')
 	const [time, setTime] = useState(1200)
 	const [timer, setTimer] = useState(null)
+
+	const formatTime = secs => {
+		const minutes = Math.floor(secs / 60)
+		const seconds = secs % 60
+		const secondsFormated = seconds < 10 ? '0' + seconds : seconds
+		return `${minutes} : ${secondsFormated}`
+	}
 
 	return (
 		<div>
@@ -21,7 +28,7 @@ const App = () => {
 			)}
 			{status === 'work' && <img src='./images/work.png' />}
 			{status === 'rest' && <img src='./images/rest.png' />}
-			{status !== 'off' && <div className='timer'>18:23</div>}
+			{status !== 'off' && <div className='timer'>{formatTime(time)}</div>}
 			{status === 'off' && <button className='btn'>Start</button>}
 			{status !== 'off' && <button className='btn'>Stop</button>}
 			<button className='btn btn-close'>X</button>

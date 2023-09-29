@@ -1,11 +1,11 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { render } from 'react-dom'
 
 const App = () => {
-	const [status, setStatus] = useState('work')
-	const [time, setTime] = useState(1200)
-	const [timer, setTimer] = useState(null)
+	const [status, setStatus] = useState('off')
+	const [time, setTime] = useState(10)
+	const [_, setTimer] = useState(null)
 
 	const formatTime = secs => {
 		const minutes = Math.floor(secs / 60)
@@ -13,6 +13,28 @@ const App = () => {
 		const secondsFormated = seconds < 10 ? '0' + seconds : seconds
 		return `${minutes} : ${secondsFormated}`
 	}
+
+	const startTimer = () => {
+		setTime(10)
+		setStatus('work')
+		setTimer(
+			setInterval(() => {
+				setTime(time => time - 1)
+			}, 1000)
+		)
+	}
+
+	useEffect(() => {
+		if (time === 0) {
+			if (status === 'work') {
+				setStatus('rest')
+				setTime(20)
+			} else {
+				setStatus('work')
+				setTime(1200)
+			}
+		}
+	}, [time])
 
 	return (
 		<div>
@@ -29,8 +51,16 @@ const App = () => {
 			{status === 'work' && <img src='./images/work.png' />}
 			{status === 'rest' && <img src='./images/rest.png' />}
 			{status !== 'off' && <div className='timer'>{formatTime(time)}</div>}
-			{status === 'off' && <button className='btn'>Start</button>}
-			{status !== 'off' && <button className='btn'>Stop</button>}
+			{status === 'off' && (
+				<button className='btn' onClick={() => startTimer()}>
+					Start
+				</button>
+			)}
+			{status !== 'off' && (
+				<button className='btn'>
+					Stop
+				</button>
+			)}
 			<button className='btn btn-close'>X</button>
 		</div>
 	)
